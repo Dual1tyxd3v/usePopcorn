@@ -1,11 +1,12 @@
 import { useState } from 'react';
 import { tempMovieData, tempWatchedData } from '../../const';
 import { average } from '../../utils';
+import Nav from '../nav/nav';
 
 export default function App() {
   const [query, setQuery] = useState('');
-  const [movies, /* setMovies */] = useState(tempMovieData);
-  const [watched, /* setWatched */] = useState(tempWatchedData);
+  const [movies /* setMovies */] = useState(tempMovieData);
+  const [watched /* setWatched */] = useState(tempWatchedData);
   const [isOpen1, setIsOpen1] = useState(true);
   const [isOpen2, setIsOpen2] = useState(true);
 
@@ -13,25 +14,17 @@ export default function App() {
   const avgUserRating = average(watched.map((movie) => movie.userRating));
   const avgRuntime = average(watched.map((movie) => movie.runtime));
 
+  function onChangeInputHandler(value: string) {
+    setQuery(value);
+  }
+
   return (
     <>
-      <nav className="nav-bar">
-        <div className="logo">
-          <span role="img">🍿</span>
-          <h1>usePopcorn</h1>
-        </div>
-        <input
-          className="search"
-          type="text"
-          placeholder="Search movies..."
-          value={query}
-          onChange={(e) => setQuery(e.target.value)}
-        />
-        <p className="num-results">
-          Found <strong>{movies.length}</strong> results
-        </p>
-      </nav>
-
+      <Nav
+        moviesLength={movies.length}
+        query={query}
+        onChangeInputHandler={onChangeInputHandler}
+      />
       <main className="main">
         <div className="box">
           <button
