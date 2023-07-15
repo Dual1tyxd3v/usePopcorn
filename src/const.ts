@@ -1,4 +1,8 @@
-export const STARS_COUNT = 10;
+export const STAR_CONFIG = {
+  color: '#fcc419',
+  size: '20px',
+  starsCount: 10
+};
 
 export const tempMovieData = [
   {

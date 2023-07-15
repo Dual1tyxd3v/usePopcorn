@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
-import { STARS_COUNT } from '../../const';
+import { STAR_CONFIG } from '../../const';
 import Star from '../star/star';
 
 export default function Stars() {
   const [rate, setRate] = useState(0);
   const [tempRate, setTempRate] = useState(0);
+
+  const { color, size, starsCount } = STAR_CONFIG;
 
   function onChangeRating(value: number) {
     setRate(value);
@@ -16,19 +18,20 @@ export default function Stars() {
 
   return (
     <div style={{ display: 'flex' }}>
-      {Array.from({ length: STARS_COUNT }, (_, i: number) => (
+      {Array.from({ length: starsCount }, (_, i: number) => (
         <React.Fragment key={`star_${i + 1}`}>
-          {/* <input value={i + 1} name="star" type="radio" /> */}
           <Star
             key={`star_${i + 1}`}
             value={i + 1}
             full={tempRate <= 0 ? rate >= i + 1 : tempRate >= i + 1}
             onRateChange={onChangeRating}
             onHoverRate={onHoverRating}
+            color={color}
+            size={size}
           />
         </React.Fragment>
       ))}
-      <p>{tempRate || rate || ''}</p>
+      <p style={{ fontSize: size, color: color }}>{tempRate || rate || ''}</p>
     </div>
   );
 }
