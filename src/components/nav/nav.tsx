@@ -1,16 +1,19 @@
+import Logo from '../logo/logo';
+
 type NavProps = {
   moviesLength: number;
   query: string;
   onChangeInputHandler: (value: string) => void;
 };
 
-export default function Nav({ moviesLength, query, onChangeInputHandler }: NavProps) {
+export default function Nav({
+  moviesLength,
+  query,
+  onChangeInputHandler,
+}: NavProps) {
   return (
     <nav className="nav-bar">
-      <div className="logo">
-        <span role="img">🍿</span>
-        <h1>usePopcorn</h1>
-      </div>
+      <Logo />
       <input
         className="search"
         type="text"
