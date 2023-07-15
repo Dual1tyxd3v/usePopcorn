@@ -1,3 +1,5 @@
+export const STARS_COUNT = 10;
+
 export const tempMovieData = [
   {
     imdbID: 'tt1375666',

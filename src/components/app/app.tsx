@@ -4,6 +4,7 @@ import Nav from '../nav/nav';
 import Box from '../box/box';
 import MovieList from '../movie-list/movie-list';
 import Summary from '../summary/summary';
+import Stars from '../stars/stars';
 
 export default function App() {
   const [query, setQuery] = useState('');
@@ -16,6 +17,7 @@ export default function App() {
 
   return (
     <>
+      <Stars />
       <Nav
         moviesLength={movies.length}
         query={query}
@@ -26,10 +28,8 @@ export default function App() {
           <MovieList type="short" movies={movies} />
         </Box>
         <Box>
-          <>
-            <Summary watched={watched} />
-            <MovieList movies={watched} />
-          </>
+          <Summary watched={watched} />
+          <MovieList movies={watched} />
         </Box>
       </main>
     </>
