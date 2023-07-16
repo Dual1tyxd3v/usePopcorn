@@ -1,23 +1,25 @@
 import { useEffect, useState } from 'react';
-import { API_URL, tempWatchedData } from '../../const';
+import { tempWatchedData } from '../../const';
 import Nav from '../nav/nav';
 import Box from '../box/box';
 import MovieList from '../movie-list/movie-list';
 import Summary from '../summary/summary';
 import Stars from '../stars/stars';
-import { MovieDataType, ResponseType } from '../../types/types';
+import { MovieDataType } from '../../types/types';
+import { fetchMovies } from '../../utils';
 
 export default function App() {
   const [movies, setMovies] = useState<MovieDataType | []>([]);
   const [watched /* setWatched */] = useState(tempWatchedData);
+  const q = 'pulpdqwrqrqr';
 
   useEffect(() => {
-    fetch(`${API_URL}pulp`)
-      .then((res) => res.json())
-      .then((res) => {
-        const movs = res as ResponseType;
-        setMovies(movs.Search);
-      });
+    async function loadMovies() {
+      const movs = await fetchMovies(q);
+      setMovies(movs.Search);
+    }
+
+    loadMovies();
   }, []);
 
   return (
