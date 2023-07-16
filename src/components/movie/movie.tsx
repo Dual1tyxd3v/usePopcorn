@@ -54,6 +54,15 @@ export default function Movie({
   }, [id]);
 
   useEffect(() => {
+    function pressToClose() {
+      closeHandler(null);
+    }
+    document.addEventListener('keydown', pressToClose);
+
+    return () => document.removeEventListener('keydown', pressToClose);
+  }, [closeHandler]);
+
+  useEffect(() => {
     if (movie) {
       document.title = movie.Title;
     }
@@ -68,7 +77,7 @@ export default function Movie({
   }
 
   if (error || !movie) {
-    return <Error message={(error as string) || 'Oops! Try again later...'} />;
+    return <Error message={(error as string) || ''} />;
   }
 
   function changeUserRating(value: number) {
