@@ -17,7 +17,7 @@ export default function Stars() {
   }
 
   return (
-    <div style={{ display: 'flex' }}>
+    <div style={{ display: 'flex', alignItems: 'center' }}>
       {Array.from({ length: starsCount }, (_, i: number) => (
         <React.Fragment key={`star_${i + 1}`}>
           <Star
@@ -31,7 +31,7 @@ export default function Stars() {
           />
         </React.Fragment>
       ))}
-      <p style={{ fontSize: size, color: color }}>{tempRate || rate || ''}</p>
+      <p style={{ fontSize: size, color: color, lineHeight: '1' }}>{tempRate || rate || ''}</p>
     </div>
   );
 }

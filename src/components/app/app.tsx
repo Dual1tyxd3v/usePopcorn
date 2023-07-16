@@ -4,7 +4,6 @@ import Nav from '../nav/nav';
 import Box from '../box/box';
 import MovieList from '../movie-list/movie-list';
 import Summary from '../summary/summary';
-import Stars from '../stars/stars';
 import { MovieDataType } from '../../types/types';
 import { fetchMovies } from '../../utils';
 import Loader from '../loader/loader';
@@ -50,7 +49,6 @@ export default function App() {
 
   return (
     <>
-      <Stars />
       <Nav
         moviesLength={movies.length}
         query={query}

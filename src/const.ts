@@ -1,6 +1,6 @@
 export const STAR_CONFIG = {
   color: '#fcc419',
-  size: '20px',
+  size: '24px',
   starsCount: 10
 };
 
