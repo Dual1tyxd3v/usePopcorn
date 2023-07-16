@@ -8,7 +8,6 @@ import Stars from '../stars/stars';
 import { MovieDataType, ResponseType } from '../../types/types';
 
 export default function App() {
-  const [query, setQuery] = useState('');
   const [movies, setMovies] = useState<MovieDataType | []>([]);
   const [watched /* setWatched */] = useState(tempWatchedData);
 
@@ -21,18 +20,10 @@ export default function App() {
       });
   }, []);
 
-  function onChangeInputHandler(value: string) {
-    setQuery(value);
-  }
-
   return (
     <>
       <Stars />
-      <Nav
-        moviesLength={movies.length}
-        query={query}
-        onChangeInputHandler={onChangeInputHandler}
-      />
+      <Nav moviesLength={0} />
       <main className="main">
         <Box>
           <MovieList type="short" movies={movies} />
