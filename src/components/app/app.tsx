@@ -9,6 +9,7 @@ import { MovieDataType } from '../../types/types';
 import { fetchMovies } from '../../utils';
 import Loader from '../loader/loader';
 import Error from '../error/error';
+import Movie from '../movie/movie';
 
 export default function App() {
   const [movies, setMovies] = useState<MovieDataType | []>([]);
@@ -16,6 +17,7 @@ export default function App() {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<boolean | string>(false);
   const [query, setQuery] = useState('');
+  const [activeId, setActiveId] = useState<string | null>(null);
 
   useEffect(() => {
     async function loadMovies() {
@@ -42,6 +44,10 @@ export default function App() {
     setQuery(value);
   }
 
+  function changeActiveId(value: string | null) {
+    setActiveId(value === activeId ? null : value);
+  }
+
   return (
     <>
       <Stars />
@@ -54,11 +60,23 @@ export default function App() {
         <Box>
           {isLoading && <Loader />}
           {!isLoading && error && <Error message={error as string} />}
-          {!isLoading && !error && <MovieList type="short" movies={movies} />}
+          {!isLoading && !error && (
+            <MovieList
+              changeActiveId={changeActiveId}
+              type="short"
+              movies={movies}
+            />
+          )}
         </Box>
         <Box>
-          <Summary watched={watched} />
-          <MovieList movies={watched} />
+          {activeId ? (
+            <Movie id={activeId} closeHandler={changeActiveId} />
+          ) : (
+            <>
+              <Summary watched={watched} />
+              <MovieList changeActiveId={changeActiveId} movies={watched} />
+            </>
+          )}
         </Box>
       </main>
     </>

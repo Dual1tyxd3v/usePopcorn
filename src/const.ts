@@ -5,6 +5,7 @@ export const STAR_CONFIG = {
 };
 
 export const API_URL = 'https://www.omdbapi.com/?apikey=f98b5e10&s=';
+export const API_FULL_URL = 'http://www.omdbapi.com/?apikey=f98b5e10&i=__ID__&plot=full';
 export const QUERY_CHANGE_DELAY = 1000;
 
 export const tempMovieData = [
