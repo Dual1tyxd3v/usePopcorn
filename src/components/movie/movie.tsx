@@ -28,14 +28,18 @@ export default function Movie({
   const [userRating, setUserRating] = useState<number>(0);
 
   useEffect(() => {
+    const controller = new AbortController();
     async function loadMovies() {
       try {
         setIsLoading(true);
         setError(false);
-        const mov = await fetchFullMovie(id);
+        const mov = await fetchFullMovie(id, controller);
         setMovie(mov);
       } catch (e) {
         const err = e as Error;
+        if (err.name === 'AbortError') {
+          return;
+        }
         setError(err.message);
       } finally {
         setIsLoading(false);
@@ -43,6 +47,10 @@ export default function Movie({
     }
 
     id && loadMovies();
+
+    return () => {
+      controller.abort();
+    };
   }, [id]);
 
   useEffect(() => {
