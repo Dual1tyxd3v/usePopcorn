@@ -1,12 +1,12 @@
-import { useState } from 'react';
 import Logo from '../logo/logo';
 
 type NavProps = {
   moviesLength: number;
+  query: string;
+  changeQuery: (v: string) => void;
 };
 
-export default function Nav({ moviesLength }: NavProps) {
-  const [query, setQuery] = useState('');
+export default function Nav({ moviesLength, query, changeQuery }: NavProps) {
   return (
     <nav className="nav-bar">
       <Logo />
@@ -15,7 +15,7 @@ export default function Nav({ moviesLength }: NavProps) {
         type="text"
         placeholder="Search movies..."
         value={query}
-        onChange={(e) => setQuery(e.target.value)}
+        onChange={(e) => changeQuery(e.target.value)}
       />
       <p className="num-results">
         Found <strong>{moviesLength}</strong> results

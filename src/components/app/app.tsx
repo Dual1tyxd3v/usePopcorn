@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { tempWatchedData } from '../../const';
+import { QUERY_CHANGE_DELAY, tempWatchedData } from '../../const';
 import Nav from '../nav/nav';
 import Box from '../box/box';
 import MovieList from '../movie-list/movie-list';
@@ -15,15 +15,14 @@ export default function App() {
   const [watched /* setWatched */] = useState(tempWatchedData);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<boolean | string>(false);
-
-  const q = 'pulp';
+  const [query, setQuery] = useState('');
 
   useEffect(() => {
     async function loadMovies() {
       try {
         setIsLoading(true);
         setError(false);
-        const movs = await fetchMovies(q);
+        const movs = await fetchMovies(query);
         setMovies(movs.Search || []);
       } catch (e) {
         const err = e as Error;
@@ -32,14 +31,25 @@ export default function App() {
         setIsLoading(false);
       }
     }
+    const timer = setTimeout(() => {
+      query.length && loadMovies();
+    }, QUERY_CHANGE_DELAY);
 
-    loadMovies();
-  }, []);
+    return () => clearTimeout(timer);
+  }, [query]);
+
+  function changeQuery(value: string) {
+    setQuery(value);
+  }
 
   return (
     <>
       <Stars />
-      <Nav moviesLength={movies.length} />
+      <Nav
+        moviesLength={movies.length}
+        query={query}
+        changeQuery={changeQuery}
+      />
       <main className="main">
         <Box>
           {isLoading && <Loader />}
