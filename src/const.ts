@@ -4,6 +4,8 @@ export const STAR_CONFIG = {
   starsCount: 10
 };
 
+export const API_URL = 'https://www.omdbapi.com/?apikey=f98b5e10&s=';
+
 export const tempMovieData = [
   {
     imdbID: 'tt1375666',

@@ -18,3 +18,9 @@ export type WatchedMovieType = {
 };
 
 export type WatchedMovieDataType = WatchedMovieType[];
+
+export type ResponseType = {
+  Search: MovieDataType;
+  totalResults: number;
+  Response: boolean;
+}
