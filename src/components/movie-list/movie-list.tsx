@@ -9,22 +9,24 @@ import MenuCard from '../menu-card/menu-card';
 
 type MovieListProps = {
   movies: MovieDataType | WatchedMovieDataType;
-  type?: string;
   changeActiveId: (v: null | string) => void;
+  deleteWatchedMovie?: (i: string) => void;
 };
 
-export default function MovieList({ movies, type = '', changeActiveId }: MovieListProps) {
+export default function MovieList({ movies, changeActiveId, deleteWatchedMovie }: MovieListProps) {
   return (
     <ul className="list list-movies">
       {movies?.map((movie) => (
         <MenuCard changeActiveId={changeActiveId} key={movie.imdbID} movie={movie}>
-          {type === 'short' ? (
+          {!deleteWatchedMovie ? (
             <ContentMovie year={movie.Year} />
           ) : (
             <ContentWatchedMovie
-              imdbRating={(movie as WatchedMovieType).imdbRating}
-              userRating={(movie as WatchedMovieType).userRating}
-              runtime={(movie as WatchedMovieType).runtime}
+              imdbRating={+(movie as WatchedMovieType).imdbRating}
+              userRating={+(movie as WatchedMovieType).userRating}
+              runtime={Number.parseInt((movie as WatchedMovieType).runtime, 10)}
+              deleteWatchedMovie={deleteWatchedMovie}
+              id={movie.imdbID}
             />
           )}
         </MenuCard>

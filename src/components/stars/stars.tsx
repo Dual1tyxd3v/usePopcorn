@@ -2,7 +2,11 @@ import React, { useState } from 'react';
 import { STAR_CONFIG } from '../../const';
 import Star from '../star/star';
 
-export default function Stars() {
+type StarsProps = {
+  changeUserRating: (v: number) => void;
+};
+
+export default function Stars({ changeUserRating }: StarsProps) {
   const [rate, setRate] = useState(0);
   const [tempRate, setTempRate] = useState(0);
 
@@ -10,6 +14,7 @@ export default function Stars() {
 
   function onChangeRating(value: number) {
     setRate(value);
+    changeUserRating(value);
   }
 
   function onHoverRating(value: number) {
@@ -31,7 +36,9 @@ export default function Stars() {
           />
         </React.Fragment>
       ))}
-      <p style={{ fontSize: size, color: color, lineHeight: '1' }}>{tempRate || rate || ''}</p>
+      <p style={{ fontSize: size, color: color, lineHeight: '1' }}>
+        {tempRate || rate || ''}
+      </p>
     </div>
   );
 }

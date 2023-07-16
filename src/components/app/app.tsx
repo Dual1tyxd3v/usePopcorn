@@ -1,18 +1,22 @@
 import { useEffect, useState } from 'react';
-import { QUERY_CHANGE_DELAY, tempWatchedData } from '../../const';
+import { QUERY_CHANGE_DELAY } from '../../const';
 import Nav from '../nav/nav';
 import Box from '../box/box';
 import MovieList from '../movie-list/movie-list';
 import Summary from '../summary/summary';
-import { MovieDataType } from '../../types/types';
+import {
+  MovieDataType,
+  WatchedMovieDataType,
+  WatchedMovieType,
+} from '../../types/types';
 import { fetchMovies } from '../../utils';
 import Loader from '../loader/loader';
 import Error from '../error/error';
 import Movie from '../movie/movie';
 
 export default function App() {
-  const [movies, setMovies] = useState<MovieDataType | []>([]);
-  const [watched /* setWatched */] = useState(tempWatchedData);
+  const [movies, setMovies] = useState<MovieDataType>([]);
+  const [watched, setWatched] = useState<WatchedMovieDataType>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<boolean | string>(false);
   const [query, setQuery] = useState('');
@@ -47,6 +51,19 @@ export default function App() {
     setActiveId(value === activeId ? null : value);
   }
 
+  function addWatchedMovie(movie: WatchedMovieType) {
+    const index = watched.findIndex((mov) => mov.imdbID === movie.imdbID);
+    setWatched(
+      index < 0
+        ? [...watched, movie]
+        : watched.map((mov) => (mov.imdbID === movie.imdbID ? movie : mov))
+    );
+  }
+
+  function deleteWatchedMovie(id: string) {
+    setWatched(watched.filter((mov) => mov.imdbID !== id));
+  }
+
   return (
     <>
       <Nav
@@ -61,18 +78,22 @@ export default function App() {
           {!isLoading && !error && (
             <MovieList
               changeActiveId={changeActiveId}
-              type="short"
               movies={movies}
             />
           )}
         </Box>
         <Box>
           {activeId ? (
-            <Movie id={activeId} closeHandler={changeActiveId} />
+            <Movie
+              watched={watched}
+              addWatchedMovie={addWatchedMovie}
+              id={activeId}
+              closeHandler={changeActiveId}
+            />
           ) : (
             <>
               <Summary watched={watched} />
-              <MovieList changeActiveId={changeActiveId} movies={watched} />
+              <MovieList deleteWatchedMovie={deleteWatchedMovie} changeActiveId={changeActiveId} movies={watched} />
             </>
           )}
         </Box>

@@ -1,6 +1,10 @@
 import { useEffect, useState } from 'react';
 import { fetchFullMovie } from '../../utils';
-import { FullMovieType } from '../../types/types';
+import {
+  FullMovieType,
+  WatchedMovieDataType,
+  WatchedMovieType,
+} from '../../types/types';
 import Loader from '../loader/loader';
 import Error from '../error/error';
 import Stars from '../stars/stars';
@@ -8,12 +12,20 @@ import Stars from '../stars/stars';
 type MovieProps = {
   id: string;
   closeHandler: (v: string | null) => void;
+  addWatchedMovie: (m: WatchedMovieType) => void;
+  watched: WatchedMovieDataType;
 };
 
-export default function Movie({ id, closeHandler }: MovieProps) {
+export default function Movie({
+  id,
+  closeHandler,
+  addWatchedMovie,
+  watched,
+}: MovieProps) {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<boolean | string>(false);
   const [movie, setMovie] = useState<null | FullMovieType>(null);
+  const [userRating, setUserRating] = useState<number>(0);
 
   useEffect(() => {
     async function loadMovies() {
@@ -40,9 +52,40 @@ export default function Movie({ id, closeHandler }: MovieProps) {
   if (error || !movie) {
     return <Error message={(error as string) || 'Oops! Try again later...'} />;
   }
+
+  function changeUserRating(value: number) {
+    setUserRating(value);
+  }
+
+  function addMovie() {
+    const newMovie = {
+      imdbID,
+      Title,
+      Year,
+      Poster,
+      runtime: Runtime,
+      imdbRating,
+      userRating: userRating.toString(),
+    };
+    addWatchedMovie(newMovie);
+    closeHandler(null);
+  }
+
   const {
-    Title, Poster, Runtime, imdbRating, Plot, Released, Actors, Director, Genre,
+    Title,
+    imdbID,
+    Poster,
+    Year,
+    Runtime,
+    imdbRating,
+    Plot,
+    Released,
+    Actors,
+    Director,
+    Genre,
   } = movie;
+
+  const myRating = watched.find((mov) => mov.imdbID === imdbID)?.userRating || 0;
   return (
     <div className="details">
       <header>
@@ -51,7 +94,7 @@ export default function Movie({ id, closeHandler }: MovieProps) {
         </button>
         <img src={Poster} alt={Title} />
         <div className="details-overview">
-          <h2>{Title}</h2>
+          <h3>{Title}</h3>
           <p>
             {Released} &bull; {Runtime}
           </p>
@@ -65,7 +108,18 @@ export default function Movie({ id, closeHandler }: MovieProps) {
       </header>
       <section>
         <div className="rating">
-          <Stars />
+          {myRating ? (
+            <p>You already rate this movie - {myRating}⭐</p>
+          ) : (
+            <>
+              <Stars changeUserRating={changeUserRating} />
+              {userRating > 0 && (
+                <button className="btn-add" onClick={addMovie}>
+                  + Add to list
+                </button>
+              )}
+            </>
+          )}
         </div>
         <p>
           <em>{Plot}</em>

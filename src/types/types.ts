@@ -12,9 +12,9 @@ export type WatchedMovieType = {
   Title: string;
   Year: string;
   Poster: string;
-  runtime: number;
-  imdbRating: number;
-  userRating: number;
+  runtime: string;
+  imdbRating: string;
+  userRating: string;
 };
 
 export type WatchedMovieDataType = WatchedMovieType[];
