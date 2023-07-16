@@ -45,6 +45,16 @@ export default function Movie({
     id && loadMovies();
   }, [id]);
 
+  useEffect(() => {
+    if (movie) {
+      document.title = movie.Title;
+    }
+
+    return () => {
+      document.title = 'usePopcorn';
+    };
+  }, [movie]);
+
   if (isLoading) {
     return <Loader />;
   }
@@ -85,7 +95,8 @@ export default function Movie({
     Genre,
   } = movie;
 
-  const myRating = watched.find((mov) => mov.imdbID === imdbID)?.userRating || 0;
+  const myRating =
+    watched.find((mov) => mov.imdbID === imdbID)?.userRating || 0;
   return (
     <div className="details">
       <header>
