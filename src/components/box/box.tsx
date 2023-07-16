@@ -1,7 +1,7 @@
-import { useState } from 'react';
+import { ReactNode, useState } from 'react';
 
 type BoxProps = {
-  children: JSX.Element | JSX.Element[];
+  children: ReactNode;
 }
 
 export default function Box({children}: BoxProps) {

@@ -9,5 +9,10 @@ export const fetchMovies = async (query: string) => {
   if (!res.ok) {
     throw new Error('Could not load');
   }
-  return (await res.json()) as ResponseType;
+  const data = await res.json() as ResponseType;
+  if (!data.Search) {
+    throw new Error('Films not found');
+  }
+  return data;
 };
+
