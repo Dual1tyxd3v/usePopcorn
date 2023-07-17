@@ -27,6 +27,7 @@ export default function Movie({
   const [movie, setMovie] = useState<null | FullMovieType>(null);
   const [userRating, setUserRating] = useState<number>(0);
 
+  // loading data
   useEffect(() => {
     const controller = new AbortController();
     async function loadMovies() {
@@ -53,6 +54,7 @@ export default function Movie({
     };
   }, [id]);
 
+  // handling esc keydown
   useEffect(() => {
     function pressToClose() {
       closeHandler(null);
@@ -62,6 +64,7 @@ export default function Movie({
     return () => document.removeEventListener('keydown', pressToClose);
   }, [closeHandler]);
 
+  // changing title
   useEffect(() => {
     if (movie) {
       document.title = movie.Title;

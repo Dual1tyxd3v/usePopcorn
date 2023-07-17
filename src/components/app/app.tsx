@@ -16,7 +16,10 @@ import Movie from '../movie/movie';
 
 export default function App() {
   const [movies, setMovies] = useState<MovieDataType>([]);
-  const [watched, setWatched] = useState<WatchedMovieDataType>([]);
+  const [watched, setWatched] = useState<WatchedMovieDataType>(() => {
+    const movs = localStorage.getItem('movies');
+    return movs ? (JSON.parse(movs) as WatchedMovieDataType) : [];
+  });
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<boolean | string>(false);
   const [query, setQuery] = useState('');
@@ -49,6 +52,10 @@ export default function App() {
       controller.abort();
     };
   }, [query]);
+
+  useEffect(() => {
+    localStorage.setItem('movies', JSON.stringify(watched));
+  }, [watched]);
 
   function changeQuery(value: string) {
     setQuery(value);
@@ -83,10 +90,7 @@ export default function App() {
           {isLoading && <Loader />}
           {!isLoading && error && <Error message={error as string} />}
           {!isLoading && !error && (
-            <MovieList
-              changeActiveId={changeActiveId}
-              movies={movies}
-            />
+            <MovieList changeActiveId={changeActiveId} movies={movies} />
           )}
         </Box>
         <Box>
@@ -100,7 +104,11 @@ export default function App() {
           ) : (
             <>
               <Summary watched={watched} />
-              <MovieList deleteWatchedMovie={deleteWatchedMovie} changeActiveId={changeActiveId} movies={watched} />
+              <MovieList
+                deleteWatchedMovie={deleteWatchedMovie}
+                changeActiveId={changeActiveId}
+                movies={watched}
+              />
             </>
           )}
         </Box>
