@@ -8,6 +8,7 @@ import {
 import Loader from '../loader/loader';
 import Error from '../error/error';
 import Stars from '../stars/stars';
+import { useKeydown } from '../../hooks/useKeydown';
 
 type MovieProps = {
   id: string;
@@ -25,7 +26,8 @@ export default function Movie({
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<boolean | string>(false);
   const [movie, setMovie] = useState<null | FullMovieType>(null);
-  const [userRating, setUserRating] = useState<number>(0);
+  const [userRating, setUserRating] = useState(0);
+  useKeydown(() => closeHandler(null), 'escape');
 
   // loading data
   useEffect(() => {
@@ -53,18 +55,6 @@ export default function Movie({
       controller.abort();
     };
   }, [id]);
-
-  // handling esc keydown
-  useEffect(() => {
-    function pressToClose(e: KeyboardEvent) {
-      if (e.code === 'Esc') {
-        closeHandler(null);
-      }
-    }
-    document.addEventListener('keydown', pressToClose);
-
-    return () => document.removeEventListener('keydown', pressToClose);
-  }, [closeHandler]);
 
   // changing title
   useEffect(() => {

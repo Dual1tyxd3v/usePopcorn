@@ -1,5 +1,6 @@
-import { useEffect, useRef } from 'react';
+import { useRef } from 'react';
 import Logo from '../logo/logo';
+import { useKeydown } from '../../hooks/useKeydown';
 
 type NavProps = {
   moviesLength: number;
@@ -9,25 +10,17 @@ type NavProps = {
 
 export default function Nav({ moviesLength, query, changeQuery }: NavProps) {
   const inputEl = useRef(null);
-
-  useEffect(() => {
+  useKeydown(() => {
     if (!inputEl.current) {
       return;
     }
     const input = inputEl.current as HTMLInputElement;
-    function callback(e: KeyboardEvent) {
-      if (e.code !== 'Enter') {
-        return;
-      }
-      if (document.activeElement !== input) {
-        changeQuery('');
-      }
-      input.focus();
+    if (document.activeElement !== input) {
+      changeQuery('');
     }
-    document.addEventListener('keydown', callback);
+    input.focus();
+  }, 'enter');
 
-    return () => document.removeEventListener('keydown', callback);
-  }, [changeQuery]);
   return (
     <nav className="nav-bar">
       <Logo />
