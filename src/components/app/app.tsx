@@ -1,30 +1,23 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import Nav from '../nav/nav';
 import Box from '../box/box';
 import MovieList from '../movie-list/movie-list';
 import Summary from '../summary/summary';
-import {
-  WatchedMovieDataType,
-  WatchedMovieType,
-} from '../../types/types';
+import { WatchedMovieDataType, WatchedMovieType } from '../../types/types';
 import Loader from '../loader/loader';
 import Error from '../error/error';
 import Movie from '../movie/movie';
 import { useMovie } from '../../hooks/useMovie';
+import { useLocalStorage } from '../../hooks/useLocalStorage';
 
 export default function App() {
-  const [watched, setWatched] = useState<WatchedMovieDataType>(() => {
-    const movs = localStorage.getItem('movies');
-    return movs ? (JSON.parse(movs) as WatchedMovieDataType) : [];
-  });
   const [query, setQuery] = useState('');
   const [activeId, setActiveId] = useState<string | null>(null);
-  const {movies, isLoading, error} = useMovie(query);
-
-  // preserve watched films in storage
-  useEffect(() => {
-    localStorage.setItem('movies', JSON.stringify(watched));
-  }, [watched]);
+  const { movies, isLoading, error } = useMovie(query);
+  const { watched, setWatched } = useLocalStorage<WatchedMovieDataType>(
+    [],
+    'movies'
+  );
 
   function changeQuery(value: string) {
     setQuery(value);
