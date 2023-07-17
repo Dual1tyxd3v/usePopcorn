@@ -56,8 +56,10 @@ export default function Movie({
 
   // handling esc keydown
   useEffect(() => {
-    function pressToClose() {
-      closeHandler(null);
+    function pressToClose(e: KeyboardEvent) {
+      if (e.code === 'Esc') {
+        closeHandler(null);
+      }
     }
     document.addEventListener('keydown', pressToClose);
 
